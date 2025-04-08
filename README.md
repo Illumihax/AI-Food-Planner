@@ -8,7 +8,7 @@ The FastAPI Backend should be ablöe to call the gemini API to create Recipes, s
 ## Step by Step Plan
 
 ### Backend
-1. Set up the FastAPI framework.
+1. Set up the FastAPI framework. (done)
 2. Implement the Gemini API call for recipe generation.
 3. Store generated recipes in a MySQL database.
 4. Create endpoints to retrieve and update recipes.
