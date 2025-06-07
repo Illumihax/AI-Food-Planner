@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+I am running frontend and backend with a auto-reload so that all the changes i can immediately see. YOu dsont have to run the frontend and backend after doing changes!
