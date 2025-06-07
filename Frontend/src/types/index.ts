@@ -1,6 +1,22 @@
 export interface Ingredient {
   id: number;
   name: string;
+  
+  // Original serving nutrition
+  calories_per_serving: number;
+  protein_per_serving: number;
+  carbs_per_serving: number;
+  fat_per_serving: number;
+  fiber_per_serving?: number;
+  sugar_per_serving?: number;
+  sodium_per_serving?: number;
+  
+  // Serving information
+  serving_size: number;
+  serving_unit: string;
+  serving_description?: string;
+  
+  // Legacy per-100g values (for backward compatibility)
   calories_per_100g: number;
   protein_per_100g: number;
   carbs_per_100g: number;
@@ -8,6 +24,7 @@ export interface Ingredient {
   fiber_per_100g?: number;
   sugar_per_100g?: number;
   sodium_per_100g?: number;
+  
   category?: string;
 }
 

@@ -15,6 +15,8 @@ def get_meal_plans(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     meal_plans = db.query(models.MealPlan).filter(models.MealPlan.user_id == 1).offset(skip).limit(limit).all()
     return meal_plans
 
+
+
 @router.get("/{meal_plan_id}", response_model=schemas.MealPlan)
 def get_meal_plan(meal_plan_id: int, db: Session = Depends(get_db)):
     """Get a specific meal plan by ID"""

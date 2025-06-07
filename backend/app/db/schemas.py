@@ -5,6 +5,22 @@ from datetime import datetime
 # Base schemas
 class IngredientBase(BaseModel):
     name: str
+    
+    # Original serving nutrition
+    calories_per_serving: float = 0
+    protein_per_serving: float = 0
+    carbs_per_serving: float = 0
+    fat_per_serving: float = 0
+    fiber_per_serving: Optional[float] = 0
+    sugar_per_serving: Optional[float] = 0
+    sodium_per_serving: Optional[float] = 0
+    
+    # Serving information
+    serving_size: float = 100
+    serving_unit: str = "g"
+    serving_description: Optional[str] = None
+    
+    # Legacy per-100g values (for backward compatibility)
     calories_per_100g: float = 0
     protein_per_100g: float = 0
     carbs_per_100g: float = 0
@@ -12,6 +28,7 @@ class IngredientBase(BaseModel):
     fiber_per_100g: Optional[float] = 0
     sugar_per_100g: Optional[float] = 0
     sodium_per_100g: Optional[float] = 0
+    
     category: Optional[str] = None
 
 class IngredientCreate(IngredientBase):

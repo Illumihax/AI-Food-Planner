@@ -34,6 +34,22 @@ class Ingredient(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(200), nullable=False, index=True)
+    
+    # Original serving nutrition (as returned by API)
+    calories_per_serving = Column(Float, nullable=False, default=0)
+    protein_per_serving = Column(Float, nullable=False, default=0)
+    carbs_per_serving = Column(Float, nullable=False, default=0)
+    fat_per_serving = Column(Float, nullable=False, default=0)
+    fiber_per_serving = Column(Float, nullable=True, default=0)
+    sugar_per_serving = Column(Float, nullable=True, default=0)
+    sodium_per_serving = Column(Float, nullable=True, default=0)
+    
+    # Serving information
+    serving_size = Column(Float, nullable=False, default=100)  # e.g., 1, 53, 100
+    serving_unit = Column(String(50), nullable=False, default="g")  # e.g., "egg", "g", "ml"
+    serving_description = Column(String(200), nullable=True)  # e.g., "Per 1 egg", "Per 100g"
+    
+    # Legacy per-100g values (calculated for backward compatibility)
     calories_per_100g = Column(Float, nullable=False, default=0)
     protein_per_100g = Column(Float, nullable=False, default=0)
     carbs_per_100g = Column(Float, nullable=False, default=0)
@@ -41,6 +57,7 @@ class Ingredient(Base):
     fiber_per_100g = Column(Float, nullable=True, default=0)
     sugar_per_100g = Column(Float, nullable=True, default=0)
     sodium_per_100g = Column(Float, nullable=True, default=0)
+    
     category = Column(String(100), nullable=True)  # e.g., "vegetables", "protein", "grains"
     
     # Relationships

@@ -1,7 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from app.db.database import create_tables
 from app.api import recipes, meal_plans, ingredients
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Create FastAPI app
 app = FastAPI(

@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.db import models, schemas
 from typing import Optional
 
@@ -53,7 +54,11 @@ class RecipeService:
             return None
         
         update_data = recipe_update.dict(exclude_unset=True, exclude={'ingredients'})
+        print(f"Update data received: {update_data}")  # Debug log
+        print(f"Original recipe - cuisine_type: {recipe.cuisine_type}, dietary_tags: {recipe.dietary_tags}")  # Debug log
+        
         for field, value in update_data.items():
+            print(f"Setting {field} = {value}")  # Debug log
             setattr(recipe, field, value)
         
         # Update ingredients if provided
@@ -83,6 +88,7 @@ class RecipeService:
         
         db.commit()
         db.refresh(recipe)
+        print(f"Updated recipe - cuisine_type: {recipe.cuisine_type}, dietary_tags: {recipe.dietary_tags}")  # Debug log
         return recipe
     
     @staticmethod
@@ -105,12 +111,12 @@ class RecipeService:
         
         # Get recipe ingredients with their quantities
         recipe_ingredients = db.execute(
-            f"""
+            text("""
             SELECT i.*, ri.quantity, ri.unit
             FROM ingredients i
             JOIN recipe_ingredients ri ON i.id = ri.ingredient_id
-            WHERE ri.recipe_id = {recipe_id}
-            """
+            WHERE ri.recipe_id = :recipe_id
+            """), {"recipe_id": recipe_id}
         ).fetchall()
         
         total_calories = 0

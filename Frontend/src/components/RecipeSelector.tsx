@@ -7,12 +7,14 @@ interface RecipeSelectorProps {
   recipes: Recipe[];
   onRecipeSelect: (recipe: Recipe) => void;
   onCancel: () => void;
+  onCreateRecipe?: () => void;
 }
 
 export default function RecipeSelector({
   recipes,
   onRecipeSelect,
-  onCancel
+  onCancel,
+  onCreateRecipe
 }: RecipeSelectorProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -123,13 +125,24 @@ export default function RecipeSelector({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-end space-x-3 pt-3 border-t">
-        <button
-          onClick={onCancel}
-          className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-        >
-          Cancel
-        </button>
+      <div className="flex justify-between items-center pt-3 border-t">
+        {onCreateRecipe && (
+          <button
+            onClick={onCreateRecipe}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-1"
+          >
+            <span>➕</span>
+            <span>Create New</span>
+          </button>
+        )}
+        <div className="flex space-x-3">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
