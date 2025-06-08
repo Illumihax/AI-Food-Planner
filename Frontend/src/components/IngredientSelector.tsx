@@ -45,35 +45,43 @@ export default function IngredientSelector({
   const [dbIngredients, setDbIngredients] = useState<Ingredient[]>([]);
   const [fatSecretOptions, setFatSecretOptions] = useState<FatSecretOption[]>([]);
   const [selectedOption, setSelectedOption] = useState<FatSecretOption | null>(null);
-  const [editedIngredient, setEditedIngredient] = useState<FatSecretOption | null>(
-    editingIngredient ? {
-      name: editingIngredient.name,
-      calories: editingIngredient.calories_per_serving,
-      protein_g: editingIngredient.protein_per_serving,
-      carbohydrates_total_g: editingIngredient.carbs_per_serving,
-      fat_total_g: editingIngredient.fat_per_serving,
-      fiber_g: editingIngredient.fiber_per_serving || 0,
-      sugar_g: editingIngredient.sugar_per_serving || 0,
-      sodium_mg: editingIngredient.sodium_per_serving || 0,
-      serving_size_g: editingIngredient.serving_size,
-      serving_unit: editingIngredient.serving_unit,
-      serving_description: editingIngredient.serving_description || '',
-      calories_per_100g: editingIngredient.calories_per_100g,
-      protein_per_100g: editingIngredient.protein_per_100g,
-      carbs_per_100g: editingIngredient.carbs_per_100g,
-      fat_per_100g: editingIngredient.fat_per_100g,
-      fiber_per_100g: editingIngredient.fiber_per_100g || 0,
-      sugar_per_100g: editingIngredient.sugar_per_100g || 0,
-      sodium_per_100g: editingIngredient.sodium_per_100g || 0,
-      category: editingIngredient.category || ''
-    } : null
-  );
+  const [editedIngredient, setEditedIngredient] = useState<FatSecretOption | null>(null);
   
   const [searchLoading, setSearchLoading] = useState(false);
   const [apiLoading, setApiLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [showApiOptions, setShowApiOptions] = useState(false);
   const [showEditForm, setShowEditForm] = useState(!!editingIngredient);
+
+  // Handle editingIngredient prop changes
+  useEffect(() => {
+    if (editingIngredient) {
+      setEditedIngredient({
+        name: editingIngredient.name,
+        calories: editingIngredient.calories_per_serving,
+        protein_g: editingIngredient.protein_per_serving,
+        carbohydrates_total_g: editingIngredient.carbs_per_serving,
+        fat_total_g: editingIngredient.fat_per_serving,
+        fiber_g: editingIngredient.fiber_per_serving || 0,
+        sugar_g: editingIngredient.sugar_per_serving || 0,
+        sodium_mg: editingIngredient.sodium_per_serving || 0,
+        serving_size_g: editingIngredient.serving_size,
+        serving_unit: editingIngredient.serving_unit,
+        serving_description: editingIngredient.serving_description || '',
+        calories_per_100g: editingIngredient.calories_per_100g,
+        protein_per_100g: editingIngredient.protein_per_100g,
+        carbs_per_100g: editingIngredient.carbs_per_100g,
+        fat_per_100g: editingIngredient.fat_per_100g,
+        fiber_per_100g: editingIngredient.fiber_per_100g || 0,
+        sugar_per_100g: editingIngredient.sugar_per_100g || 0,
+        sodium_per_100g: editingIngredient.sodium_per_100g || 0,
+        category: editingIngredient.category || ''
+      });
+      setShowEditForm(true);
+    } else {
+      setShowEditForm(false);
+    }
+  }, [editingIngredient]);
 
   // Search database ingredients
   useEffect(() => {

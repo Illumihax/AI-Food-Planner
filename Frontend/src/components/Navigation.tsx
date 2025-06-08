@@ -7,7 +7,8 @@ export default function Navigation() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/', label: 'Weekly Meal Plan', icon: '📅' },
+    { href: '/', label: 'Dashboard', icon: '🏠' },
+    { href: '/weekly-plan', label: 'Weekly Plan', icon: '📅' },
     { href: '/recipes', label: 'Recipes', icon: '👨‍🍳' },
     { href: '/ingredients', label: 'Ingredients', icon: '🥬' },
   ];

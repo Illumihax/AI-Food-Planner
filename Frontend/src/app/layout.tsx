@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <Navigation />
         <main className="min-h-screen">
-          {children}
+        {children}
         </main>
       </body>
     </html>

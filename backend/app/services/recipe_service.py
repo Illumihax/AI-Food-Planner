@@ -53,16 +53,27 @@ class RecipeService:
         if not recipe:
             return None
         
+        # Get base update data excluding unset values
         update_data = recipe_update.dict(exclude_unset=True, exclude={'ingredients'})
+        
+        # Handle fields that should be allowed to be None (clearing them)
+        full_data = recipe_update.dict(exclude={'ingredients'})
+        nullable_fields = ['cuisine_type', 'dietary_tags', 'description']
+        for field in nullable_fields:
+            if field in full_data:  # Field was explicitly provided (even if None)
+                update_data[field] = full_data[field]
         print(f"Update data received: {update_data}")  # Debug log
-        print(f"Original recipe - cuisine_type: {recipe.cuisine_type}, dietary_tags: {recipe.dietary_tags}")  # Debug log
+        print(f"Recipe update dict: {recipe_update.dict()}")  # Debug log
+        print(f"Original recipe - title: {recipe.title}, cuisine_type: {recipe.cuisine_type}, dietary_tags: {recipe.dietary_tags}")  # Debug log
         
         for field, value in update_data.items():
-            print(f"Setting {field} = {value}")  # Debug log
+            old_value = getattr(recipe, field)
+            print(f"Setting {field}: {old_value} -> {value}")  # Debug log
             setattr(recipe, field, value)
         
         # Update ingredients if provided
         if recipe_update.ingredients is not None:
+            print(f"Updating ingredients: {len(recipe_update.ingredients)} ingredients")  # Debug log
             # Remove existing ingredients
             db.execute(
                 models.recipe_ingredients.delete().where(
@@ -86,9 +97,16 @@ class RecipeService:
                         )
                     )
         
+        print(f"Before commit - cuisine_type: {recipe.cuisine_type}, dietary_tags: {recipe.dietary_tags}")  # Debug log
+        db.flush()  # Ensure the changes are written to the database session
         db.commit()
         db.refresh(recipe)
-        print(f"Updated recipe - cuisine_type: {recipe.cuisine_type}, dietary_tags: {recipe.dietary_tags}")  # Debug log
+        print(f"After commit - cuisine_type: {recipe.cuisine_type}, dietary_tags: {recipe.dietary_tags}")  # Debug log
+        
+        # Double-check by querying fresh from database
+        fresh_recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
+        print(f"Fresh from DB - cuisine_type: {fresh_recipe.cuisine_type}, dietary_tags: {fresh_recipe.dietary_tags}")  # Debug log
+        
         return recipe
     
     @staticmethod

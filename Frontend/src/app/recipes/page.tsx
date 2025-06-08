@@ -1,29 +1,37 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Recipe } from '@/types';
-import { fetchRecipes, deleteRecipe } from '@/lib/api';
+import { Recipe, Ingredient } from '@/types';
+import { fetchRecipes, deleteRecipe, fetchIngredients } from '@/lib/api';
 import RecipeCreator from '@/components/RecipeCreator';
+import MultiSelect from '@/components/MultiSelect';
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [showRecipeCreator, setShowRecipeCreator] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedDietaryTags, setSelectedDietaryTags] = useState<string[]>([]);
+  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
 
   useEffect(() => {
-    loadRecipes();
+    loadData();
   }, []);
 
-  const loadRecipes = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
-      const data = await fetchRecipes();
-      setRecipes(data);
+      const [recipesData, ingredientsData] = await Promise.all([
+        fetchRecipes(),
+        fetchIngredients()
+      ]);
+      setRecipes(recipesData);
+      setIngredients(ingredientsData);
     } catch (error) {
-      console.error('Failed to load recipes:', error);
+      console.error('Failed to load data:', error);
     } finally {
       setLoading(false);
     }
@@ -63,7 +71,7 @@ export default function RecipesPage() {
     }
   };
 
-  // Filter recipes based on search and category
+  // Filter recipes based on search, category, dietary tags, and ingredients
   const filteredRecipes = recipes.filter(recipe => {
     const matchesSearch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          recipe.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -71,11 +79,37 @@ export default function RecipesPage() {
     
     const matchesCategory = !selectedCategory || recipe.cuisine_type === selectedCategory;
     
-    return matchesSearch && matchesCategory;
+    const matchesDietaryTags = selectedDietaryTags.length === 0 || 
+      selectedDietaryTags.every(tag => 
+        recipe.dietary_tags?.toLowerCase().includes(tag.toLowerCase())
+      );
+    
+    const matchesIngredients = selectedIngredients.length === 0 ||
+      selectedIngredients.every(ingredientName =>
+        recipe.ingredients?.some(ri => 
+          ri.ingredient?.name?.toLowerCase().includes(ingredientName.toLowerCase())
+        )
+      );
+    
+    return matchesSearch && matchesCategory && matchesDietaryTags && matchesIngredients;
   });
 
   // Get unique categories
   const categories = Array.from(new Set(recipes.map(recipe => recipe.cuisine_type).filter(Boolean)));
+  
+  // Get unique dietary tags
+  const allDietaryTags = Array.from(new Set(
+    recipes.flatMap(recipe => 
+      recipe.dietary_tags?.split(',').map(tag => tag.trim()).filter(Boolean) || []
+    )
+  ));
+  
+  // Get unique ingredient names
+  const allIngredientNames = Array.from(new Set(
+    recipes.flatMap(recipe => 
+      recipe.ingredients?.map(ri => ri.ingredient?.name).filter((name): name is string => Boolean(name)) || []
+    )
+  ));
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -115,8 +149,8 @@ export default function RecipesPage() {
 
       {/* Search and Filters */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search Recipes
             </label>
@@ -143,7 +177,53 @@ export default function RecipesPage() {
               ))}
             </select>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Dietary Tags
+            </label>
+            <MultiSelect
+              options={allDietaryTags}
+              selectedValues={selectedDietaryTags}
+              onChange={setSelectedDietaryTags}
+              placeholder="All dietary tags"
+              searchPlaceholder="Search dietary tags..."
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Ingredients
+            </label>
+            <MultiSelect
+              options={allIngredientNames}
+              selectedValues={selectedIngredients}
+              onChange={setSelectedIngredients}
+              placeholder="All ingredients"
+              searchPlaceholder="Search ingredients..."
+            />
+          </div>
         </div>
+        
+        {/* Active Filters Summary */}
+        {(selectedDietaryTags.length > 0 || selectedIngredients.length > 0 || selectedCategory || searchQuery) && (
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-600">
+                Showing {filteredRecipes.length} of {recipes.length} recipes
+              </div>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('');
+                  setSelectedDietaryTags([]);
+                  setSelectedIngredients([]);
+                }}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                Clear all filters
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Recipe Grid */}

@@ -169,8 +169,8 @@ export default function RecipeCreator({ onRecipeCreated, onCancel, editingRecipe
         cook_time: formData.cook_time ? parseInt(formData.cook_time) : undefined,
         servings: parseInt(formData.servings),
         difficulty: formData.difficulty || undefined,
-        cuisine_type: formData.cuisine_type || undefined,
-        dietary_tags: formData.dietary_tags || undefined,
+        cuisine_type: formData.cuisine_type?.trim() || undefined,
+        dietary_tags: formData.dietary_tags?.trim() || undefined,
         ingredients: selectedIngredients.map(item => ({
           ingredient_id: item.ingredient_id,
           quantity: item.quantity,
