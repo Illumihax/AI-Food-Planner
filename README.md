@@ -13,9 +13,22 @@ Plan weekly meals, track macros, save recipes, and manage ingredients. Future id
 - Frontend: Next.js + TypeScript + Tailwind CSS
 
 ### Get Started
-This repo is being scaffolded. See:
-- `ROADMAP.md` for milestones and tracking
-- `CONVENTIONS.md` for structure and theming
+See `ROADMAP.md` for milestones and `CONVENTIONS.md` for structure and theming.
+
+#### Prerequisites
+- Node.js 18+ and npm
+- Python 3.10+
+
+#### Install
+- Frontend
+  - `cd frontend && npm install`
+- Backend
+  - `cd backend && python -m venv .venv && .venv\\Scripts\\activate && pip install -r requirements.txt`
+
+#### Run
+- Frontend: `cd frontend && npm run dev` → `http://localhost:3000`
+- Backend: `cd backend && uvicorn app.main:app --reload` → `http://localhost:8000`
+  - Health: `http://localhost:8000/health`
 
 ### Status
 - Scoping and planning complete. Implementation next.
