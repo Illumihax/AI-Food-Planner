@@ -17,15 +17,15 @@ This roadmap translates the idea into a concrete delivery plan with milestones f
 ### Milestones
 
 #### M0 — Project Scaffolding
-- [ ] Choose framework versions and initialize repos
-  - [ ] Backend: FastAPI app with SQLite connection and base settings
-  - [ ] Frontend: Next.js + TypeScript + Tailwind configured
-- [ ] Add linting/formatting (Black/Ruff for Python; ESLint/Prettier for TS)
-- [ ] Add `.env.example` and config loading
-- [ ] Health endpoints and a starter page
+- [x] Choose framework versions and initialize repos
+  - [x] Backend: FastAPI app with base settings and SQLite wiring
+  - [x] Frontend: Next.js + TypeScript + Tailwind configured
+- [x] Add linting/formatting (Black/Ruff for Python; ESLint/Prettier for TS)
+- [x] Add `.env.example` and config loading
+- [x] Health endpoints and a starter page
 
 Acceptance criteria:
-- [ ] Both apps run locally with hot reload
+- [x] Both apps run locally with hot reload
 - [ ] CI runs format/lint successfully (optional)
 
 #### M1 — Data Model & Persistence

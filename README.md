@@ -8,7 +8,7 @@ Plan weekly meals, track macros, save recipes, and manage ingredients. Future id
 - Ingredient search and CRUD using OpenFoodFacts data
 - Daily targets for calories, carbs, protein, fats with progress view
 
-### Tech (proposed)
+### Tech
 - Backend: Python + FastAPI + SQLite, OpenFoodFacts package
 - Frontend: Next.js + TypeScript + Tailwind CSS
 
@@ -31,7 +31,9 @@ See `ROADMAP.md` for milestones and `CONVENTIONS.md` for structure and theming.
   - Health: `http://localhost:8000/health`
 
 ### Status
-- Scoping and planning complete. Implementation next.
+- Backend scaffolded (FastAPI app, CORS, health endpoint, config, DB session)
+- Frontend scaffolded (Next.js app, Tailwind v4 theme tokens)
+- Lint/format config added (backend: Ruff/Black; frontend: ESLint/Prettier)
 
 ### License
 MIT
