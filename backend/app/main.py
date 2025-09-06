@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
+from .db import engine
+from .models import Base
+from .api_ingredients import router as ingredients_router
 
 
 def create_app() -> FastAPI:
@@ -22,6 +25,14 @@ def create_app() -> FastAPI:
     @app.get("/")
     def root() -> dict[str, str]:
         return {"message": "AI Food Planner API"}
+
+    # Routers
+    app.include_router(ingredients_router)
+
+    # DB init
+    @app.on_event("startup")
+    def on_startup() -> None:
+        Base.metadata.create_all(bind=engine)
 
     return app
 

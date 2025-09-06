@@ -35,8 +35,8 @@ Acceptance criteria:
   - RecipeIngredient: id, recipe_id, ingredient_id, quantity, unit
   - MealEntry: id, date, mealType (breakfast/lunch/snack/dinner), recipe_id?, customName?, macros
   - UserSettings: daily targets for calories, carbs, protein, fats
-- [ ] Define SQL models and migrations (or auto-create tables)
-- [ ] Pydantic schemas (request/response)
+- [x] Define SQL models and migrations (or auto-create tables)
+- [x] Pydantic schemas (request/response)
 
 Acceptance criteria:
 - [ ] CRUD works for Ingredient and Recipe, including nested RecipeIngredients
@@ -54,7 +54,7 @@ Acceptance criteria:
 
 #### M3 — Backend API Surface (v1)
 - [ ] Endpoints
-  - [ ] `GET /ingredients`, `POST /ingredients`, `PUT /ingredients/{id}`, `DELETE ...`
+  - [x] `GET /ingredients`, `POST /ingredients`, `PUT /ingredients/{id}`, `DELETE ...`
   - [ ] `GET /recipes`, `POST /recipes` (with ingredients), `PUT`, `DELETE`
   - [ ] `GET /plan?week=YYYY-Www`, `POST /plan/meal-entries`, `DELETE /plan/meal-entries/{id}`
   - [ ] `GET /settings`, `PUT /settings`
