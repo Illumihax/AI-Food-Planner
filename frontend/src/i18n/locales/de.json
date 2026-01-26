@@ -1,0 +1,135 @@
+{
+  "app": {
+    "name": "NutriPlan",
+    "tagline": "Verfolge deine Makros, plane deine Mahlzeiten"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "diary": "Ernährungstagebuch",
+    "recipes": "Rezepte",
+    "goals": "Ziele",
+    "mealPlanner": "Essensplaner",
+    "aiChat": "KI-Assistent"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "add": "Hinzufügen",
+    "search": "Suchen",
+    "loading": "Lädt...",
+    "noResults": "Keine Ergebnisse gefunden",
+    "error": "Ein Fehler ist aufgetreten",
+    "success": "Erfolg",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "tomorrow": "Morgen"
+  },
+  "theme": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "language": {
+    "english": "Englisch",
+    "german": "Deutsch"
+  },
+  "macros": {
+    "calories": "Kalorien",
+    "protein": "Protein",
+    "carbs": "Kohlenhydrate",
+    "fat": "Fett",
+    "fiber": "Ballaststoffe",
+    "sugar": "Zucker",
+    "kcal": "kcal",
+    "grams": "g"
+  },
+  "meals": {
+    "breakfast": "Frühstück",
+    "lunch": "Mittagessen",
+    "dinner": "Abendessen",
+    "snack": "Snack",
+    "addFood": "Essen hinzufügen",
+    "addEntry": "Eintrag hinzufügen",
+    "searchFoods": "Lebensmittel suchen...",
+    "customFood": "Eigenes Lebensmittel",
+    "fromRecipe": "Aus Rezept",
+    "amount": "Menge",
+    "unit": "Einheit",
+    "serving": "Portion",
+    "servings": "Portionen"
+  },
+  "diary": {
+    "title": "Ernährungstagebuch",
+    "dailySummary": "Tageszusammenfassung",
+    "remaining": "Verbleibend",
+    "over": "Über",
+    "noMeals": "Keine Mahlzeiten für diesen Tag erfasst",
+    "startTracking": "Beginne deine Mahlzeiten zu erfassen"
+  },
+  "recipes": {
+    "title": "Meine Rezepte",
+    "create": "Rezept erstellen",
+    "name": "Rezeptname",
+    "description": "Beschreibung",
+    "instructions": "Anleitung",
+    "ingredients": "Zutaten",
+    "addIngredient": "Zutat hinzufügen",
+    "perServing": "Pro Portion",
+    "total": "Gesamt",
+    "noRecipes": "Noch keine Rezepte",
+    "createFirst": "Erstelle dein erstes Rezept"
+  },
+  "goals": {
+    "title": "Tagesziele",
+    "setGoals": "Setze deine Ziele",
+    "dailyCalories": "Tägliche Kalorien",
+    "dailyProtein": "Tägliches Protein",
+    "dailyCarbs": "Tägliche Kohlenhydrate",
+    "dailyFat": "Tägliches Fett",
+    "notes": "Notizen",
+    "noGoals": "Noch keine Ziele gesetzt",
+    "setFirst": "Setze dein erstes Tagesziel"
+  },
+  "mealPlanner": {
+    "title": "KI Essensplaner",
+    "generate": "Essensplan erstellen",
+    "generating": "Erstelle deinen Essensplan...",
+    "days": "Tage",
+    "preferences": "Präferenzen",
+    "restrictions": "Ernährungseinschränkungen",
+    "useCurrentGoals": "Meine aktuellen Ziele verwenden",
+    "day": "Tag",
+    "estimatedMacros": "Geschätzte Makros"
+  },
+  "aiChat": {
+    "title": "KI Ernährungsassistent",
+    "placeholder": "Frag mich zu Ernährung, Essensideen oder Planung...",
+    "send": "Senden",
+    "thinking": "Denke nach...",
+    "suggestions": "Vorgeschlagene Fragen"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Willkommen zurück!",
+    "todaysSummary": "Heutige Zusammenfassung",
+    "quickActions": "Schnellaktionen",
+    "logFood": "Essen erfassen",
+    "viewDiary": "Tagebuch ansehen",
+    "createRecipe": "Rezept erstellen",
+    "askAi": "KI fragen"
+  },
+  "food": {
+    "searchResults": "Suchergebnisse",
+    "nutritionPer100g": "Nährwerte pro 100g",
+    "brand": "Marke",
+    "barcode": "Barcode",
+    "addToDiary": "Zum Tagebuch hinzufügen",
+    "saveFood": "Lebensmittel speichern",
+    "customFood": "Eigenes Lebensmittel"
+  }
+}

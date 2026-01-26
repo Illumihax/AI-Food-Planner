@@ -1,0 +1,135 @@
+{
+  "app": {
+    "name": "NutriPlan",
+    "tagline": "Track your macros, plan your meals"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "diary": "Food Diary",
+    "recipes": "Recipes",
+    "goals": "Goals",
+    "mealPlanner": "Meal Planner",
+    "aiChat": "AI Assistant"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "error": "An error occurred",
+    "success": "Success",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "english": "English",
+    "german": "German"
+  },
+  "macros": {
+    "calories": "Calories",
+    "protein": "Protein",
+    "carbs": "Carbs",
+    "fat": "Fat",
+    "fiber": "Fiber",
+    "sugar": "Sugar",
+    "kcal": "kcal",
+    "grams": "g"
+  },
+  "meals": {
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "snack": "Snack",
+    "addFood": "Add Food",
+    "addEntry": "Add Entry",
+    "searchFoods": "Search foods...",
+    "customFood": "Custom Food",
+    "fromRecipe": "From Recipe",
+    "amount": "Amount",
+    "unit": "Unit",
+    "serving": "Serving",
+    "servings": "Servings"
+  },
+  "diary": {
+    "title": "Food Diary",
+    "dailySummary": "Daily Summary",
+    "remaining": "Remaining",
+    "over": "Over",
+    "noMeals": "No meals logged for this day",
+    "startTracking": "Start tracking your meals"
+  },
+  "recipes": {
+    "title": "My Recipes",
+    "create": "Create Recipe",
+    "name": "Recipe Name",
+    "description": "Description",
+    "instructions": "Instructions",
+    "ingredients": "Ingredients",
+    "addIngredient": "Add Ingredient",
+    "perServing": "Per Serving",
+    "total": "Total",
+    "noRecipes": "No recipes yet",
+    "createFirst": "Create your first recipe"
+  },
+  "goals": {
+    "title": "Daily Goals",
+    "setGoals": "Set Your Goals",
+    "dailyCalories": "Daily Calories",
+    "dailyProtein": "Daily Protein",
+    "dailyCarbs": "Daily Carbs",
+    "dailyFat": "Daily Fat",
+    "notes": "Notes",
+    "noGoals": "No goals set yet",
+    "setFirst": "Set your first daily goal"
+  },
+  "mealPlanner": {
+    "title": "AI Meal Planner",
+    "generate": "Generate Meal Plan",
+    "generating": "Generating your meal plan...",
+    "days": "Days",
+    "preferences": "Preferences",
+    "restrictions": "Dietary Restrictions",
+    "useCurrentGoals": "Use my current goals",
+    "day": "Day",
+    "estimatedMacros": "Estimated Macros"
+  },
+  "aiChat": {
+    "title": "AI Nutrition Assistant",
+    "placeholder": "Ask me about nutrition, meal ideas, or food planning...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "suggestions": "Suggested questions"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back!",
+    "todaysSummary": "Today's Summary",
+    "quickActions": "Quick Actions",
+    "logFood": "Log Food",
+    "viewDiary": "View Diary",
+    "createRecipe": "Create Recipe",
+    "askAi": "Ask AI"
+  },
+  "food": {
+    "searchResults": "Search Results",
+    "nutritionPer100g": "Nutrition per 100g",
+    "brand": "Brand",
+    "barcode": "Barcode",
+    "addToDiary": "Add to Diary",
+    "saveFood": "Save Food",
+    "customFood": "Custom Food"
+  }
+}
