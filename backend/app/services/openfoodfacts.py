@@ -2,9 +2,12 @@
 
 import httpx
 from typing import Any
+import logging
 
 from app.config import get_settings
 from app.schemas.food import FoodSearchResult
+
+logger = logging.getLogger(__name__)
 
 
 class OpenFoodFactsService:
@@ -16,6 +19,8 @@ class OpenFoodFactsService:
         self.headers = {
             "User-Agent": self.settings.off_user_agent,
         }
+        # Longer timeout for Open Food Facts API (can be slow)
+        self.timeout = httpx.Timeout(30.0, connect=10.0)
     
     async def search_products(
         self,
@@ -34,30 +39,36 @@ class OpenFoodFactsService:
         Returns:
             List of food search results
         """
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{self.base_url}/cgi/search.pl",
-                params={
-                    "search_terms": query,
-                    "search_simple": 1,
-                    "action": "process",
-                    "json": 1,
-                    "page": page,
-                    "page_size": page_size,
-                    "fields": "code,product_name,brands,image_front_small_url,"
-                              "nutriments,nutriscore_grade,nova_group",
-                },
-                headers=self.headers,
-                timeout=10.0,
-            )
-            response.raise_for_status()
-            data = response.json()
-        
-        results = []
-        for product in data.get("products", []):
-            results.append(self._parse_product(product))
-        
-        return results
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                response = await client.get(
+                    f"{self.base_url}/cgi/search.pl",
+                    params={
+                        "search_terms": query,
+                        "search_simple": 1,
+                        "action": "process",
+                        "json": 1,
+                        "page": page,
+                        "page_size": page_size,
+                        "fields": "code,product_name,brands,image_front_small_url,"
+                                  "nutriments,nutriscore_grade,nova_group",
+                    },
+                    headers=self.headers,
+                )
+                response.raise_for_status()
+                data = response.json()
+            
+            results = []
+            for product in data.get("products", []):
+                results.append(self._parse_product(product))
+            
+            return results
+        except httpx.TimeoutException:
+            logger.warning(f"Timeout searching Open Food Facts for: {query}")
+            return []
+        except httpx.HTTPError as e:
+            logger.error(f"HTTP error searching Open Food Facts: {e}")
+            return []
     
     async def get_product_by_barcode(self, barcode: str) -> FoodSearchResult | None:
         """
@@ -69,27 +80,33 @@ class OpenFoodFactsService:
         Returns:
             Food search result or None if not found
         """
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{self.base_url}/api/v2/product/{barcode}.json",
-                params={
-                    "fields": "code,product_name,brands,image_front_small_url,"
-                              "nutriments,nutriscore_grade,nova_group",
-                },
-                headers=self.headers,
-                timeout=10.0,
-            )
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                response = await client.get(
+                    f"{self.base_url}/api/v2/product/{barcode}.json",
+                    params={
+                        "fields": "code,product_name,brands,image_front_small_url,"
+                                  "nutriments,nutriscore_grade,nova_group",
+                    },
+                    headers=self.headers,
+                )
+                
+                if response.status_code == 404:
+                    return None
+                
+                response.raise_for_status()
+                data = response.json()
             
-            if response.status_code == 404:
+            if data.get("status") != 1:
                 return None
             
-            response.raise_for_status()
-            data = response.json()
-        
-        if data.get("status") != 1:
+            return self._parse_product(data.get("product", {}))
+        except httpx.TimeoutException:
+            logger.warning(f"Timeout fetching barcode: {barcode}")
             return None
-        
-        return self._parse_product(data.get("product", {}))
+        except httpx.HTTPError as e:
+            logger.error(f"HTTP error fetching barcode {barcode}: {e}")
+            return None
     
     def _parse_product(self, product: dict[str, Any]) -> FoodSearchResult:
         """Parse Open Food Facts product data into our schema."""

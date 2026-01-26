@@ -15,7 +15,7 @@ class Base(DeclarativeBase):
 # This must be done after Base is defined
 def _import_models():
     """Import all models to register them with SQLAlchemy."""
-    from app.models import food, recipe, meal, goal  # noqa: F401
+    from app.models import food, food_cache, recipe, meal, goal  # noqa: F401
 
 _import_models()
 

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useSearchFoods } from '@/hooks/useFoods'
+import { useManualSearchFoods } from '@/hooks/useFoods'
 import { useCreateMeal, useAddMealEntry } from '@/hooks/useMeals'
 import { formatNumber } from '@/lib/utils'
 import { Search, Loader2, Plus } from 'lucide-react'
@@ -35,8 +35,28 @@ export default function AddFoodDialog({
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFood, setSelectedFood] = useState<any>(null)
   const [amount, setAmount] = useState(100)
+  const [searchResults, setSearchResults] = useState<any[]>([])
   
-  const { data: searchResults, isLoading: searching } = useSearchFoods(searchQuery)
+  const searchFoods = useManualSearchFoods()
+  
+  const handleSearch = async () => {
+    if (searchQuery.length < 2) return
+    
+    try {
+      const results = await searchFoods.mutateAsync(searchQuery)
+      setSearchResults(results || [])
+    } catch (error) {
+      console.error('Search error:', error)
+      setSearchResults([])
+    }
+  }
+  
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSearch()
+    }
+  }
   const createMeal = useCreateMeal()
   const addEntry = useAddMealEntry()
 
@@ -124,22 +144,41 @@ export default function AddFoodDialog({
           </TabsList>
 
           <TabsContent value="search" className="space-y-4">
-            {/* Search Input */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder={t('meals.searchFoods')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+            {/* Search Input with Button */}
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder={t('meals.searchFoods')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="pl-10"
+                  disabled={searchFoods.isPending}
+                />
+              </div>
+              <Button 
+                onClick={handleSearch}
+                disabled={searchFoods.isPending || searchQuery.length < 2}
+                className="min-w-[100px]"
+              >
+                {searchFoods.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <Search className="h-4 w-4 mr-2" />
+                    {t('common.search')}
+                  </>
+                )}
+              </Button>
             </div>
 
             {/* Search Results */}
             <div className="max-h-[200px] overflow-y-auto space-y-2">
-              {searching ? (
-                <div className="flex justify-center py-4">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              {searchFoods.isPending ? (
+                <div className="flex flex-col items-center justify-center py-8">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+                  <p className="text-sm text-muted-foreground">{t('common.loading')}</p>
                 </div>
               ) : searchResults && searchResults.length > 0 ? (
                 searchResults.map((food: any, i: number) => (
@@ -166,11 +205,15 @@ export default function AddFoodDialog({
                     </div>
                   </div>
                 ))
-              ) : searchQuery.length >= 2 ? (
+              ) : searchFoods.isSuccess ? (
                 <p className="text-center py-4 text-muted-foreground">
                   {t('common.noResults')}
                 </p>
-              ) : null}
+              ) : (
+                <p className="text-center py-4 text-muted-foreground">
+                  {t('meals.searchFoods')}
+                </p>
+              )}
             </div>
 
             {/* Selected Food Details */}

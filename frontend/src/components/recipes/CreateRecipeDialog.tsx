@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useCreateRecipe } from '@/hooks/useRecipes'
-import { useSearchFoods } from '@/hooks/useFoods'
+import { useManualSearchFoods } from '@/hooks/useFoods'
 import { formatNumber } from '@/lib/utils'
 import { Plus, Trash2, Loader2, Search } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
@@ -50,8 +50,28 @@ export default function CreateRecipeDialog({
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedFood, setSelectedFood] = useState<any>(null)
   const [ingredientAmount, setIngredientAmount] = useState(100)
+  const [searchResults, setSearchResults] = useState<any[]>([])
   
-  const { data: searchResults, isLoading: searching } = useSearchFoods(searchQuery)
+  const searchFoods = useManualSearchFoods()
+  
+  const handleSearch = async () => {
+    if (searchQuery.length < 2) return
+    
+    try {
+      const results = await searchFoods.mutateAsync(searchQuery)
+      setSearchResults(results || [])
+    } catch (error) {
+      console.error('Search error:', error)
+      setSearchResults([])
+    }
+  }
+  
+  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSearch()
+    }
+  }
 
   const calculateNutrition = (food: any, grams: number) => {
     const factor = grams / 100
@@ -183,21 +203,36 @@ export default function CreateRecipeDialog({
           <div className="space-y-4">
             <Label>{t('recipes.ingredients')}</Label>
             
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder={t('meals.searchFoods')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+            {/* Search with Button */}
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder={t('meals.searchFoods')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
+                  className="pl-10"
+                  disabled={searchFoods.isPending}
+                />
+              </div>
+              <Button 
+                onClick={handleSearch}
+                disabled={searchFoods.isPending || searchQuery.length < 2}
+                size="sm"
+              >
+                {searchFoods.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Search className="h-4 w-4" />
+                )}
+              </Button>
             </div>
 
             {/* Search Results */}
-            {searching ? (
-              <div className="flex justify-center py-2">
-                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            {searchFoods.isPending ? (
+              <div className="flex justify-center py-4">
+                <Loader2 className="h-5 w-5 animate-spin text-primary" />
               </div>
             ) : searchResults && searchResults.length > 0 ? (
               <div className="max-h-[150px] overflow-y-auto space-y-1 border rounded-md p-2">

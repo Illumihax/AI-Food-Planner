@@ -9,6 +9,18 @@ export function useSearchFoods(query: string, enabled = true) {
   })
 }
 
+export function useManualSearchFoods() {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: (query: string) => foodsApi.search(query),
+    onSuccess: (data, query) => {
+      // Cache the result in React Query as well
+      queryClient.setQueryData(['foods', 'search', query], data)
+    },
+  })
+}
+
 export function useFoodByBarcode(barcode: string) {
   return useQuery({
     queryKey: ['foods', 'barcode', barcode],
