@@ -1,8 +1,10 @@
 """Google Gemini AI integration service."""
 
 import json
+import asyncio
 import google.generativeai as genai
 from typing import Any
+import logging
 
 from app.config import get_settings
 from app.schemas.ai import (
@@ -10,6 +12,8 @@ from app.schemas.ai import (
     RecipeSuggestionResponse, RecipeSuggestion,
     ChatResponse, ChatMessage,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class GeminiService:
@@ -19,7 +23,8 @@ class GeminiService:
         self.settings = get_settings()
         if self.settings.gemini_api_key:
             genai.configure(api_key=self.settings.gemini_api_key)
-        self.model = genai.GenerativeModel("gemini-pro")
+        # Use gemini-2.5-flash for fast, intelligent responses (stable model)
+        self.model = genai.GenerativeModel("gemini-2.5-flash")
     
     async def generate_meal_plan(
         self,
@@ -241,8 +246,17 @@ class GeminiService:
     
     async def _generate_content(self, prompt: str) -> str:
         """Generate content using Gemini model."""
-        response = self.model.generate_content(prompt)
-        return response.text
+        try:
+            # Run the synchronous API call in a thread pool
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(
+                None,
+                lambda: self.model.generate_content(prompt)
+            )
+            return response.text
+        except Exception as e:
+            logger.error(f"Gemini API error: {e}")
+            raise
     
     def _parse_json_response(self, response: str) -> dict[str, Any]:
         """Parse JSON from Gemini response, handling markdown code blocks."""
@@ -261,6 +275,11 @@ class GeminiService:
         
         try:
             return json.loads(text)
-        except json.JSONDecodeError:
-            # If parsing fails, return empty dict
-            return {}
+        except json.JSONDecodeError as e:
+            logger.warning(f"Failed to parse JSON response: {e}")
+            logger.debug(f"Raw response: {text}")
+            # Try to extract a simple response if JSON parsing fails
+            return {
+                "response": text if len(text) < 2000 else "I apologize, but I couldn't format the response properly.",
+                "suggestions": []
+            }

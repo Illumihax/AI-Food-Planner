@@ -96,4 +96,6 @@ async def nutrition_chat(
         )
         return response
     except Exception as e:
+        import logging
+        logging.error(f"AI chat error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"AI service error: {str(e)}")
