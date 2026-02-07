@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useDailyMeals } from '@/hooks/useMeals'
+import { useDailyMeals, useRemoveMealEntry } from '@/hooks/useMeals'
 import { useGoalStore } from '@/stores/goalStore'
 import { formatNumber, calculateProgress, formatDate } from '@/lib/utils'
 import { ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react'
@@ -21,6 +21,7 @@ export default function Diary() {
   const [selectedMealType, setSelectedMealType] = useState<string>('breakfast')
   
   const { data: dailyMeals, isLoading } = useDailyMeals(selectedDate)
+  const removeMealEntry = useRemoveMealEntry()
   const { currentGoal } = useGoalStore()
 
   const goToPreviousDay = () => {
@@ -153,7 +154,17 @@ export default function Diary() {
                                 F: {formatNumber(entry.fat, 0)}g
                               </p>
                             </div>
-                            <Button variant="ghost" size="icon" className="text-destructive">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-destructive"
+                              disabled={removeMealEntry.isPending}
+                              onClick={() => {
+                                if (meal?.id && entry.id) {
+                                  removeMealEntry.mutate({ mealId: meal.id, entryId: entry.id })
+                                }
+                              }}
+                            >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>

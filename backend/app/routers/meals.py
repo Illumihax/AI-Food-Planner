@@ -56,19 +56,19 @@ async def create_meal(
     meal: MealCreate,
     db: AsyncSession = Depends(get_db),
 ):
-    """Create a new meal."""
+    """Create a new meal or return existing one (upsert)."""
     # Check if meal already exists for this date and type
     result = await db.execute(
-        select(Meal).where(
+        select(Meal)
+        .options(selectinload(Meal.entries))
+        .where(
             and_(Meal.date == meal.date, Meal.meal_type == meal.meal_type)
         )
     )
     existing = result.scalar_one_or_none()
     if existing:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Meal '{meal.meal_type}' already exists for {meal.date}"
-        )
+        # Return existing meal instead of erroring
+        return existing
     
     db_meal = Meal(
         date=meal.date,

@@ -6,10 +6,13 @@
   "nav": {
     "dashboard": "Dashboard",
     "diary": "Food Diary",
+    "weekPlanner": "Week Planner",
     "recipes": "Recipes",
+    "foods": "Foods",
     "goals": "Goals",
-    "mealPlanner": "Meal Planner",
-    "aiChat": "AI Assistant"
+    "preferences": "Preferences",
+    "mealPlanner": "AI Planner",
+    "aiChat": "AI Chat"
   },
   "common": {
     "save": "Save",
@@ -106,6 +109,28 @@
     "day": "Day",
     "estimatedMacros": "Estimated Macros"
   },
+  "weekPlanner": {
+    "title": "Week Planner",
+    "description": "Plan your meals for the entire week",
+    "createPlan": "Create Week Plan",
+    "planName": "Plan Name",
+    "planNamePlaceholder": "e.g., Healthy Week",
+    "startDate": "Start Date",
+    "generateWithAi": "Generate with AI",
+    "createEmpty": "Create Empty Plan",
+    "discard": "Discard Plan",
+    "applyToDiary": "Apply to Diary",
+    "applyDescription": "This will add all meals from this plan to your food diary starting from the selected date.",
+    "weekSummary": "Week Summary",
+    "addMeal": "Add Meal",
+    "addFoodToSlot": "Add Food",
+    "clearDay": "Clear Day",
+    "clearDayConfirm": "Remove all meals for this day?",
+    "regenerateDay": "Regenerate Day with AI",
+    "regenerateMeal": "Regenerate with AI",
+    "regenerating": "Regenerating...",
+    "noMeals": "No meals planned"
+  },
   "aiChat": {
     "title": "AI Nutrition Assistant",
     "placeholder": "Ask me about nutrition, meal ideas, or food planning...",
@@ -131,5 +156,76 @@
     "addToDiary": "Add to Diary",
     "saveFood": "Save Food",
     "customFood": "Custom Food"
+  },
+  "foods": {
+    "title": "Food Database",
+    "description": "Manage your custom foods and saved items from Open Food Facts",
+    "myFoods": "My Foods",
+    "recent": "Recent",
+    "customFoods": "Custom Foods",
+    "savedFoods": "Saved from Search",
+    "addCustom": "Add Custom Food",
+    "addCustomDescription": "Create a custom food entry with your own nutritional values",
+    "name": "Food Name",
+    "namePlaceholder": "e.g., Homemade Granola",
+    "searchPlaceholder": "Search your foods...",
+    "noFoods": "No foods yet",
+    "noFoodsDescription": "Add custom foods or save items from your searches",
+    "noRecent": "No recent foods",
+    "noRecentDescription": "Foods from your searches will appear here",
+    "save": "Save to My Foods",
+    "unsave": "Remove from My Foods",
+    "usedTimes": "Used {{count}} times"
+  },
+  "barcode": {
+    "title": "Barcode Scanner",
+    "startScanning": "Start Camera",
+    "stopScanning": "Stop Camera",
+    "scanning": "Point your camera at a barcode...",
+    "scanned": "Scanned",
+    "instructions": "Click to start your camera and scan product barcodes",
+    "errorPermission": "Camera permission was denied. Please allow camera access.",
+    "errorNoCamera": "No camera found on this device.",
+    "errorGeneric": "Failed to start camera. Please try again."
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Customize your food preferences and dietary restrictions",
+    "likedFoods": "Foods I Like",
+    "likedFoodsDescription": "Add foods you enjoy eating",
+    "dislikedFoods": "Foods I Dislike",
+    "dislikedFoodsDescription": "Add foods you want to avoid",
+    "allergies": "Allergies",
+    "allergiesDescription": "Add any food allergies",
+    "addFood": "Add food...",
+    "addAllergy": "Add allergy...",
+    "commonAllergies": "Common allergies",
+    "dietaryRestrictions": "Dietary Restrictions",
+    "dietaryRestrictionsDescription": "Select any dietary restrictions",
+    "dietary": {
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarian",
+      "pescatarian": "Pescatarian",
+      "glutenFree": "Gluten-Free",
+      "dairyFree": "Dairy-Free",
+      "nutFree": "Nut-Free",
+      "halal": "Halal",
+      "kosher": "Kosher",
+      "lowCarb": "Low Carb",
+      "keto": "Keto"
+    },
+    "budget": "Budget Preference",
+    "budgetDescription": "Set your preferred budget level for meals",
+    "budgetLevels": {
+      "low": "Budget-Friendly",
+      "medium": "Moderate",
+      "high": "Premium"
+    },
+    "cookingTime": "Max Cooking Time",
+    "cookingTimeDescription": "Maximum time you want to spend cooking",
+    "minutes": "minutes",
+    "notes": "Additional Notes",
+    "notesDescription": "Any other preferences or dietary notes",
+    "notesPlaceholder": "E.g., prefer organic ingredients, no spicy food..."
   }
 }

@@ -1,7 +1,7 @@
 """Food search cache database model."""
 
 from datetime import datetime
-from sqlalchemy import String, Float, DateTime, Text, Index
+from sqlalchemy import String, Float, DateTime, Text, Index, Boolean, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -38,6 +38,10 @@ class FoodCache(Base):
     nutriscore_grade: Mapped[str | None] = mapped_column(String(10), nullable=True)
     nova_group: Mapped[int | None] = mapped_column(nullable=True)
     
+    # User-specific flags
+    is_saved: Mapped[bool] = mapped_column(Boolean, default=False, index=True)
+    usage_count: Mapped[int] = mapped_column(Integer, default=0)
+    
     # Cache metadata
     cached_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
@@ -48,4 +52,4 @@ class FoodCache(Base):
     )
     
     def __repr__(self) -> str:
-        return f"<FoodCache(barcode='{self.barcode}', name='{self.name}')>"
+        return f"<FoodCache(barcode='{self.barcode}', name='{self.name}', saved={self.is_saved})>"

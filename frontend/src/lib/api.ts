@@ -33,8 +33,8 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
 
 // Foods API
 export const foodsApi = {
-  search: (query: string, page = 1, pageSize = 20) =>
-    request<any[]>(`/foods/search?query=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`),
+  search: (query: string, page = 1, pageSize = 20, localOnly = false) =>
+    request<any[]>(`/foods/search?query=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}&local_only=${localOnly}`),
   
   getByBarcode: (barcode: string) =>
     request<any>(`/foods/barcode/${barcode}`),
@@ -47,6 +47,22 @@ export const foodsApi = {
   
   delete: (id: number) =>
     request<void>(`/foods/${id}`, { method: 'DELETE' }),
+  
+  // Cached foods
+  getCached: (savedOnly = false, skip = 0, limit = 100) =>
+    request<any[]>(`/foods/cached?saved_only=${savedOnly}&skip=${skip}&limit=${limit}`),
+  
+  toggleSaveCached: (id: number) =>
+    request<any>(`/foods/cached/${id}/save`, { method: 'PUT' }),
+  
+  updateCached: (id: number, data: any) =>
+    request<any>(`/foods/cached/${id}`, { method: 'PUT', body: data }),
+  
+  deleteCached: (id: number) =>
+    request<void>(`/foods/cached/${id}`, { method: 'DELETE' }),
+  
+  incrementUsage: (id: number) =>
+    request<any>(`/foods/cached/${id}/increment-usage`, { method: 'POST' }),
 }
 
 // Recipes API
@@ -113,4 +129,55 @@ export const aiApi = {
   
   chat: (data: any) =>
     request<any>('/ai/chat', { method: 'POST', body: data }),
+}
+
+// Preferences API
+export const preferencesApi = {
+  get: () =>
+    request<any | null>('/preferences/'),
+  
+  update: (data: any) =>
+    request<any>('/preferences/', { method: 'PUT', body: data }),
+}
+
+// Week Plans API
+export const weekPlansApi = {
+  getAll: (status?: string) =>
+    request<any[]>(`/week-plans/${status ? `?status=${status}` : ''}`),
+  
+  getDraft: () =>
+    request<any | null>('/week-plans/draft'),
+  
+  get: (id: number) =>
+    request<any>(`/week-plans/${id}`),
+  
+  create: (data: any) =>
+    request<any>('/week-plans/', { method: 'POST', body: data }),
+  
+  update: (id: number, data: any) =>
+    request<any>(`/week-plans/${id}`, { method: 'PUT', body: data }),
+  
+  delete: (id: number) =>
+    request<void>(`/week-plans/${id}`, { method: 'DELETE' }),
+  
+  addMeal: (planId: number, data: any) =>
+    request<any>(`/week-plans/${planId}/meals`, { method: 'POST', body: data }),
+  
+  removeMeal: (planId: number, mealId: number) =>
+    request<void>(`/week-plans/${planId}/meals/${mealId}`, { method: 'DELETE' }),
+  
+  clearDay: (planId: number, dayIndex: number) =>
+    request<any>(`/week-plans/${planId}/days/${dayIndex}`, { method: 'DELETE' }),
+  
+  regenerateDay: (planId: number, data: { day_index: number; meal_type?: string; language?: string }) =>
+    request<any>(`/week-plans/${planId}/regenerate-day`, { method: 'POST', body: data }),
+  
+  applyToDiary: (planId: number, targetStartDate: string) =>
+    request<any>(`/week-plans/${planId}/apply-to-diary`, { 
+      method: 'POST', 
+      body: { target_start_date: targetStartDate } 
+    }),
+  
+  createFromAiPlan: (data: any) =>
+    request<any>('/week-plans/from-ai-plan', { method: 'POST', body: data }),
 }

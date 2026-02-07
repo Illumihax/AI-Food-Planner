@@ -5,11 +5,14 @@
   },
   "nav": {
     "dashboard": "Dashboard",
-    "diary": "Ernährungstagebuch",
+    "diary": "Tagebuch",
+    "weekPlanner": "Wochenplaner",
     "recipes": "Rezepte",
+    "foods": "Lebensmittel",
     "goals": "Ziele",
-    "mealPlanner": "Essensplaner",
-    "aiChat": "KI-Assistent"
+    "preferences": "Einstellungen",
+    "mealPlanner": "KI-Planer",
+    "aiChat": "KI-Chat"
   },
   "common": {
     "save": "Speichern",
@@ -106,6 +109,28 @@
     "day": "Tag",
     "estimatedMacros": "Geschätzte Makros"
   },
+  "weekPlanner": {
+    "title": "Wochenplaner",
+    "description": "Plane deine Mahlzeiten für die ganze Woche",
+    "createPlan": "Wochenplan erstellen",
+    "planName": "Plan-Name",
+    "planNamePlaceholder": "z.B. Gesunde Woche",
+    "startDate": "Startdatum",
+    "generateWithAi": "Mit KI generieren",
+    "createEmpty": "Leeren Plan erstellen",
+    "discard": "Plan verwerfen",
+    "applyToDiary": "Ins Tagebuch übernehmen",
+    "applyDescription": "Dies fügt alle Mahlzeiten aus diesem Plan zu deinem Ernährungstagebuch hinzu, beginnend ab dem ausgewählten Datum.",
+    "weekSummary": "Wochenzusammenfassung",
+    "addMeal": "Mahlzeit hinzufügen",
+    "addFoodToSlot": "Essen hinzufügen",
+    "clearDay": "Tag leeren",
+    "clearDayConfirm": "Alle Mahlzeiten für diesen Tag entfernen?",
+    "regenerateDay": "Tag mit KI neu generieren",
+    "regenerateMeal": "Mit KI neu generieren",
+    "regenerating": "Generiere neu...",
+    "noMeals": "Keine Mahlzeiten geplant"
+  },
   "aiChat": {
     "title": "KI Ernährungsassistent",
     "placeholder": "Frag mich zu Ernährung, Essensideen oder Planung...",
@@ -131,5 +156,76 @@
     "addToDiary": "Zum Tagebuch hinzufügen",
     "saveFood": "Lebensmittel speichern",
     "customFood": "Eigenes Lebensmittel"
+  },
+  "foods": {
+    "title": "Lebensmittel-Datenbank",
+    "description": "Verwalte deine eigenen Lebensmittel und gespeicherte Artikel von Open Food Facts",
+    "myFoods": "Meine Lebensmittel",
+    "recent": "Kürzlich",
+    "customFoods": "Eigene Lebensmittel",
+    "savedFoods": "Aus Suche gespeichert",
+    "addCustom": "Eigenes Lebensmittel hinzufügen",
+    "addCustomDescription": "Erstelle einen eigenen Lebensmitteleintrag mit deinen Nährwerten",
+    "name": "Lebensmittelname",
+    "namePlaceholder": "z.B. Selbstgemachtes Müsli",
+    "searchPlaceholder": "Lebensmittel suchen...",
+    "noFoods": "Noch keine Lebensmittel",
+    "noFoodsDescription": "Füge eigene Lebensmittel hinzu oder speichere Artikel aus deinen Suchen",
+    "noRecent": "Keine kürzlichen Lebensmittel",
+    "noRecentDescription": "Lebensmittel aus deinen Suchen werden hier angezeigt",
+    "save": "Zu Meine Lebensmittel hinzufügen",
+    "unsave": "Aus Meine Lebensmittel entfernen",
+    "usedTimes": "{{count}} mal verwendet"
+  },
+  "barcode": {
+    "title": "Barcode-Scanner",
+    "startScanning": "Kamera starten",
+    "stopScanning": "Kamera stoppen",
+    "scanning": "Richte deine Kamera auf einen Barcode...",
+    "scanned": "Gescannt",
+    "instructions": "Klicke um deine Kamera zu starten und Produkt-Barcodes zu scannen",
+    "errorPermission": "Kamera-Berechtigung wurde verweigert. Bitte erlaube Kamera-Zugriff.",
+    "errorNoCamera": "Keine Kamera auf diesem Gerät gefunden.",
+    "errorGeneric": "Kamera konnte nicht gestartet werden. Bitte versuche es erneut."
+  },
+  "preferences": {
+    "title": "Einstellungen",
+    "description": "Passe deine Essensvorlieben und Ernährungseinschränkungen an",
+    "likedFoods": "Lieblingsessen",
+    "likedFoodsDescription": "Füge Lebensmittel hinzu, die du gerne isst",
+    "dislikedFoods": "Ungeliebtes Essen",
+    "dislikedFoodsDescription": "Füge Lebensmittel hinzu, die du vermeiden möchtest",
+    "allergies": "Allergien",
+    "allergiesDescription": "Füge Lebensmittelallergien hinzu",
+    "addFood": "Lebensmittel hinzufügen...",
+    "addAllergy": "Allergie hinzufügen...",
+    "commonAllergies": "Häufige Allergien",
+    "dietaryRestrictions": "Ernährungseinschränkungen",
+    "dietaryRestrictionsDescription": "Wähle deine Ernährungseinschränkungen",
+    "dietary": {
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarisch",
+      "pescatarian": "Pescetarisch",
+      "glutenFree": "Glutenfrei",
+      "dairyFree": "Laktosefrei",
+      "nutFree": "Nussfrei",
+      "halal": "Halal",
+      "kosher": "Koscher",
+      "lowCarb": "Low Carb",
+      "keto": "Keto"
+    },
+    "budget": "Budget-Präferenz",
+    "budgetDescription": "Wähle dein bevorzugtes Budget für Mahlzeiten",
+    "budgetLevels": {
+      "low": "Günstig",
+      "medium": "Mittel",
+      "high": "Premium"
+    },
+    "cookingTime": "Max. Kochzeit",
+    "cookingTimeDescription": "Maximale Zeit, die du kochen möchtest",
+    "minutes": "Minuten",
+    "notes": "Zusätzliche Notizen",
+    "notesDescription": "Weitere Vorlieben oder Ernährungshinweise",
+    "notesPlaceholder": "Z.B. bevorzuge Bio-Zutaten, kein scharfes Essen..."
   }
 }

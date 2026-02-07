@@ -59,5 +59,54 @@ class FoodSearchResult(BaseModel):
     nutriscore_grade: str | None = None
     nova_group: int | None = None
     
+    # Source tracking
+    source: str = "openfoodfacts"  # "openfoodfacts", "cached", "custom"
+    
     class Config:
         from_attributes = True
+
+
+class FoodCacheResponse(BaseModel):
+    """Schema for cached food response."""
+    id: int
+    barcode: str
+    name: str
+    brand: str | None = None
+    image_url: str | None = None
+    
+    # Nutritional values per 100g
+    calories: float = 0
+    protein: float = 0
+    carbs: float = 0
+    fat: float = 0
+    fiber: float = 0
+    sugar: float = 0
+    sodium: float = 0
+    
+    # Additional info
+    nutriscore_grade: str | None = None
+    nova_group: int | None = None
+    
+    # User-specific
+    is_saved: bool = False
+    usage_count: int = 0
+    
+    # Timestamps
+    cached_at: datetime
+    expires_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class FoodCacheUpdate(BaseModel):
+    """Schema for updating cached food."""
+    name: str | None = None
+    brand: str | None = None
+    calories: float | None = Field(None, ge=0)
+    protein: float | None = Field(None, ge=0)
+    carbs: float | None = Field(None, ge=0)
+    fat: float | None = Field(None, ge=0)
+    fiber: float | None = Field(None, ge=0)
+    sugar: float | None = Field(None, ge=0)
+    sodium: float | None = Field(None, ge=0)

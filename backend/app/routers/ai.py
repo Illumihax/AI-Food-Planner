@@ -6,6 +6,7 @@ from sqlalchemy import select
 
 from app.database import get_db
 from app.models.goal import Goal
+from app.models.preferences import UserPreferences
 from app.schemas.ai import (
     MealPlanRequest, MealPlanResponse,
     RecipeSuggestionRequest, RecipeSuggestionResponse,
@@ -22,7 +23,7 @@ async def generate_meal_plan(
     request: MealPlanRequest,
     db: AsyncSession = Depends(get_db),
 ):
-    """Generate a weekly meal plan based on goals and preferences."""
+    """Generate a weekly meal plan based on goals, preferences, and user settings."""
     # Get current goal if not provided in request
     goal = None
     if request.use_current_goal:
@@ -31,6 +32,66 @@ async def generate_meal_plan(
         )
         goal = result.scalar_one_or_none()
     
+    # Get user preferences
+    pref_result = await db.execute(
+        select(UserPreferences).order_by(UserPreferences.id.desc()).limit(1)
+    )
+    user_prefs = pref_result.scalar_one_or_none()
+    
+    # Combine request preferences with user preferences
+    preferences = list(request.preferences or [])
+    restrictions = list(request.restrictions or [])
+    
+    if user_prefs:
+        # Add liked foods as preferences
+        if user_prefs.liked_foods:
+            preferences.extend([f"Include: {food}" for food in user_prefs.liked_foods])
+        
+        # Add disliked foods as restrictions
+        if user_prefs.disliked_foods:
+            restrictions.extend([f"Avoid: {food}" for food in user_prefs.disliked_foods])
+        
+        # Add allergies as strict restrictions
+        if user_prefs.allergies:
+            restrictions.extend([f"ALLERGY - must avoid: {allergy}" for allergy in user_prefs.allergies])
+        
+        # Add dietary restrictions
+        if user_prefs.dietary_restrictions:
+            diet_prefs = user_prefs.dietary_restrictions
+            if diet_prefs.get("vegan"):
+                restrictions.append("Vegan (no animal products)")
+            if diet_prefs.get("vegetarian"):
+                restrictions.append("Vegetarian (no meat)")
+            if diet_prefs.get("pescatarian"):
+                restrictions.append("Pescatarian (fish ok, no other meat)")
+            if diet_prefs.get("gluten_free"):
+                restrictions.append("Gluten-free")
+            if diet_prefs.get("dairy_free"):
+                restrictions.append("Dairy-free")
+            if diet_prefs.get("nut_free"):
+                restrictions.append("Nut-free")
+            if diet_prefs.get("halal"):
+                restrictions.append("Halal")
+            if diet_prefs.get("kosher"):
+                restrictions.append("Kosher")
+            if diet_prefs.get("low_carb"):
+                preferences.append("Low carb diet")
+            if diet_prefs.get("keto"):
+                preferences.append("Keto diet (very low carb, high fat)")
+        
+        # Add budget preference
+        if user_prefs.budget_preference:
+            budget_map = {
+                "low": "Budget-friendly, affordable ingredients",
+                "medium": "Moderate budget, balance of quality and cost",
+                "high": "Premium ingredients, no budget constraints"
+            }
+            preferences.append(budget_map.get(user_prefs.budget_preference, ""))
+        
+        # Add cooking time preference
+        if user_prefs.max_cooking_time_minutes:
+            preferences.append(f"Recipes should take max {user_prefs.max_cooking_time_minutes} minutes to cook")
+    
     try:
         plan = await gemini_service.generate_meal_plan(
             calories=request.daily_calories or (goal.daily_calories if goal else 2000),
@@ -38,8 +99,8 @@ async def generate_meal_plan(
             carbs=request.daily_carbs or (goal.daily_carbs if goal else 200),
             fat=request.daily_fat or (goal.daily_fat if goal else 65),
             days=request.days,
-            preferences=request.preferences,
-            restrictions=request.restrictions,
+            preferences=preferences,
+            restrictions=restrictions,
             language=request.language,
         )
         return plan

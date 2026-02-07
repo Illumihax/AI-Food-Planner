@@ -7,15 +7,21 @@ import {
   ChefHat,
   Target,
   Calendar,
+  CalendarDays,
   MessageSquare,
   Leaf,
+  Apple,
+  Settings,
 } from 'lucide-react'
 
 const navigation = [
   { name: 'nav.dashboard', href: '/', icon: LayoutDashboard },
   { name: 'nav.diary', href: '/diary', icon: BookOpen },
+  { name: 'nav.weekPlanner', href: '/week-planner', icon: CalendarDays },
   { name: 'nav.recipes', href: '/recipes', icon: ChefHat },
+  { name: 'nav.foods', href: '/foods', icon: Apple },
   { name: 'nav.goals', href: '/goals', icon: Target },
+  { name: 'nav.preferences', href: '/preferences', icon: Settings },
   { name: 'nav.mealPlanner', href: '/meal-planner', icon: Calendar },
   { name: 'nav.aiChat', href: '/ai-chat', icon: MessageSquare },
 ]

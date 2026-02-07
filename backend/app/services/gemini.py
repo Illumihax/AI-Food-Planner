@@ -107,6 +107,81 @@ class GeminiService:
             notes=data.get("notes"),
         )
     
+    async def generate_single_day(
+        self,
+        calories: float,
+        protein: float,
+        carbs: float,
+        fat: float,
+        day_index: int,
+        existing_week_context: list[dict] = None,
+        meal_type_filter: str | None = None,
+        preferences: list[str] = None,
+        restrictions: list[str] = None,
+        language: str = "en",
+    ) -> MealPlanDay:
+        """
+        Generate a meal plan for a single day, optionally with context of the rest of the week.
+        If meal_type_filter is provided, only regenerate that specific meal type.
+        """
+        preferences = preferences or []
+        restrictions = restrictions or []
+        
+        lang_instruction = "Respond in German." if language == "de" else "Respond in English."
+        
+        week_context = ""
+        if existing_week_context:
+            week_context = "The rest of the week looks like this (keep variety, don't repeat meals):\n"
+            for day_info in existing_week_context:
+                week_context += f"  Day {day_info['day']}: {', '.join(day_info.get('meals', []))}\n"
+        
+        meal_type_instruction = ""
+        if meal_type_filter:
+            meal_type_instruction = f"""
+            IMPORTANT: Only generate the {meal_type_filter} meal. For other meals, use empty placeholder values.
+            Focus on making the {meal_type_filter} excellent and varied from the rest of the week.
+            """
+        
+        prompt = f"""
+        {lang_instruction}
+        
+        Create a meal plan for a SINGLE day (day {day_index + 1}) with these daily nutritional targets:
+        - Calories: {calories} kcal
+        - Protein: {protein}g
+        - Carbohydrates: {carbs}g
+        - Fat: {fat}g
+        
+        {"Preferences: " + ", ".join(preferences) if preferences else ""}
+        {"Restrictions/Allergies: " + ", ".join(restrictions) if restrictions else ""}
+        
+        {week_context}
+        {meal_type_instruction}
+        
+        Return a JSON object with this exact structure:
+        {{
+            "day": {day_index + 1},
+            "breakfast": "Meal name",
+            "breakfast_description": "Brief description with main ingredients",
+            "lunch": "Meal name",
+            "lunch_description": "Brief description with main ingredients",
+            "dinner": "Meal name", 
+            "dinner_description": "Brief description with main ingredients",
+            "snacks": ["Snack 1", "Snack 2"],
+            "estimated_calories": {int(calories)},
+            "estimated_protein": {int(protein)},
+            "estimated_carbs": {int(carbs)},
+            "estimated_fat": {int(fat)}
+        }}
+        
+        Make the meals varied, practical, and delicious.
+        Return ONLY the JSON, no additional text.
+        """
+        
+        response = await self._generate_content(prompt)
+        data = self._parse_json_response(response)
+        
+        return MealPlanDay(**data)
+
     async def suggest_recipes(
         self,
         ingredients: list[str],

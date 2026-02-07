@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.database import init_db
-from app.routers import foods, recipes, meals, goals, ai
+from app.routers import foods, recipes, meals, goals, ai, preferences, week_plans
 
 
 @asynccontextmanager
@@ -44,6 +44,8 @@ def create_app() -> FastAPI:
     app.include_router(meals.router, prefix="/api/meals", tags=["Meals"])
     app.include_router(goals.router, prefix="/api/goals", tags=["Goals"])
     app.include_router(ai.router, prefix="/api/ai", tags=["AI"])
+    app.include_router(preferences.router, prefix="/api/preferences", tags=["Preferences"])
+    app.include_router(week_plans.router, prefix="/api/week-plans", tags=["Week Plans"])
     
     @app.get("/api/health")
     async def health_check():
